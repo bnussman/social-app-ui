@@ -29,7 +29,7 @@ export function NewPostDialog(props: Props) {
         <ModalHeader>New Post</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {error && <Text>{error}</Text>}
+          {/* {error && <Text>{error}</Text>} */}
           <Stack spacing={2}>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
           <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
