@@ -12,6 +12,8 @@ function App() {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { colorMode, toggleColorMode } = useColorMode();
 
+  const posts = data?.sort((a, b) => b.votes - a.votes);
+
   return (
     <Container maxW="container.lg">
       <Flex alignItems="center" mb={4} mt={4}>
@@ -38,7 +40,7 @@ function App() {
           <Spinner />
         </Center>
       )}
-      {data?.length === 0 && <Text>No Posts</Text>}
+      {posts?.length === 0 && <Text>No Posts</Text>}
       <Stack spacing={4}>
         {data?.map((post: PostType) => <Post key={post.id} {...post} />)}
       </Stack>

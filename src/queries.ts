@@ -8,7 +8,13 @@ const queryKey = 'posts';
 async function getPosts() {
   const data = await fetch(`${API_URL}/posts`);
 
-  return await data.json();
+  const parsed = await data.json();
+
+  // This is annoying, but we must to it so React Query and the native fetch
+  // function know if the call was successful or not (for handling api errors)
+  if (!data.ok) throw new Error(parsed?.message);
+
+  return parsed;
 }
 
 async function createPost(payload: Post) {
@@ -27,8 +33,36 @@ async function createPost(payload: Post) {
   return parsed;
 }
 
+async function votePost(id: string) {
+  const data = await fetch(`${API_URL}/posts/${id}/upvote`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+  });
+
+  const parsed = await data.json();
+
+  // This is annoying, but we must to it so React Query and the native fetch
+  // function know if the call was successful or not (for handling api errors)
+  if (!data.ok) throw new Error(parsed?.message);
+
+  return parsed;
+}
+
+
 export const updateStore = (newData: Post[]): void => {
   queryClient.setQueryData(queryKey, newData);
+};
+
+export const updateStoreForUpvote = (updatedPost: Post): void => {
+  const posts = queryClient.getQueryData<Post[]>(queryKey) || [];
+
+  const postIndex = posts.findIndex((post: Post) => post.id == updatedPost.id);
+
+  if (postIndex === -1) return;
+
+  posts[postIndex].votes++;
+
+  queryClient.setQueryData(queryKey, posts.sort(post => post.votes));
 };
 
 export const usePostsQuery = () =>
@@ -39,3 +73,6 @@ export const usePostsQuery = () =>
 
 export const usePostsMutation = () =>
  useMutation<Post[], APIError, Post>(createPost, { onSuccess: updateStore });
+
+export const useUpvoteMutation = () =>
+ useMutation<Post, APIError, { id: string }>(({ id }) => votePost(id), { onSuccess: updateStoreForUpvote });

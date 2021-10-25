@@ -3,6 +3,7 @@ export interface Post {
   title: string;
   username: string;
   content: string;
+  votes: number;
 }
 
 export interface APIError {
