@@ -40,7 +40,7 @@ function App() {
       )}
       {data?.length === 0 && <Text>No Posts</Text>}
       <Stack spacing={4}>
-        {data?.map((post: PostType) => <Post {...post} />)}
+        {data?.map((post: PostType) => <Post key={post.id} {...post} />)}
       </Stack>
       <NewPostDialog
         isOpen={isOpen}

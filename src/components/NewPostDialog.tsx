@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { Button } from "@chakra-ui/button";
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalFooter, ModalHeader, ModalOverlay } from "@chakra-ui/modal";
-import { Input, Stack, Textarea, Text } from "@chakra-ui/react";
+import { Input, Stack, Textarea } from "@chakra-ui/react";
 import { usePostsMutation } from "../queries";
+import { Error } from './Error';
 
 interface Props {
   onClose: () => void;
@@ -29,7 +30,7 @@ export function NewPostDialog(props: Props) {
         <ModalHeader>New Post</ModalHeader>
         <ModalCloseButton />
         <ModalBody>
-          {/* {error && <Text>{error}</Text>} */}
+          {error && <Error error={error} />}
           <Stack spacing={2}>
           <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Title" />
           <Input value={username} onChange={(e) => setUsername(e.target.value)} placeholder="Username" />
@@ -42,6 +43,7 @@ export function NewPostDialog(props: Props) {
         </ModalBody>
         <ModalFooter>
           <Button
+            isDisabled={!title || !username || !content}
             isLoading={isLoading}
             onClick={onPost}
             colorScheme="blue"

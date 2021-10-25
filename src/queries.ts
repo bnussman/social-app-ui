@@ -1,7 +1,7 @@
 import { useMutation, useQuery } from "react-query";
 import { API_URL } from "./constants";
 import { queryClient } from "./main";
-import { Post } from "./types";
+import { APIError, Post } from "./types";
 
 const queryKey = 'posts';
 
@@ -18,7 +18,13 @@ async function createPost(payload: Post) {
     body: JSON.stringify(payload)
   });
 
-  return await data.json();
+  const parsed = await data.json();
+
+  // This is annoying, but we must to it so React Query and the native fetch
+  // function know if the call was successful or not (for handling api errors)
+  if (!data.ok) throw new Error(parsed?.message);
+
+  return parsed;
 }
 
 export const updateStore = (newData: Post[]): void => {
@@ -26,10 +32,10 @@ export const updateStore = (newData: Post[]): void => {
 };
 
 export const usePostsQuery = () =>
-  useQuery<Post[], unknown>(
+  useQuery<Post[], APIError>(
     queryKey,
     getPosts,
   );
 
 export const usePostsMutation = () =>
- useMutation<Post[], unknown, Post>(createPost, { onSuccess: updateStore });
+ useMutation<Post[], APIError, Post>(createPost, { onSuccess: updateStore });
