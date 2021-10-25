@@ -17,7 +17,7 @@ async function getPosts() {
   return parsed;
 }
 
-async function createPost(payload: Post) {
+async function createPost(payload: Partial<Post>) {
   const data = await fetch(`${API_URL}/posts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -72,7 +72,7 @@ export const usePostsQuery = () =>
   );
 
 export const usePostsMutation = () =>
- useMutation<Post[], APIError, Post>(createPost, { onSuccess: updateStore });
+ useMutation<Post[], APIError, Partial<Post>>(createPost, { onSuccess: updateStore });
 
 export const useUpvoteMutation = () =>
  useMutation<Post, APIError, { id: string }>(({ id }) => votePost(id), { onSuccess: updateStoreForUpvote });
