@@ -18,7 +18,7 @@ export function Post(props: Props) {
       <Heading>{title}</Heading>
       <Flex alignItems="center" mb={2}>
         <Avatar name={username} size="sm"/>
-        <Text ml={2}>{username}</Text>
+        <Text ml={2} isTruncated>{username}</Text>
       </Flex>
       <Text>{content}</Text>
       <Button onClick={vote} isLoading={isLoading} leftIcon={<StarIcon />}>{votes || 0} votes</Button>

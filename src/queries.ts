@@ -21,7 +21,8 @@ async function createPost(payload: Partial<Post>) {
   const data = await fetch(`${API_URL}/posts`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload)
+    body: JSON.stringify(payload),
+    // credentials: "same-origin",
   });
 
   const parsed = await data.json();
