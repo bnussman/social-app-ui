@@ -22,7 +22,7 @@ async function createPost(payload: Partial<Post>) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
-    credentials: "include",
+    credentials: 'include',
   });
 
   const parsed = await data.json();
